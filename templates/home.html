@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+        <h1>Welcome to SongFinder</h1>
+        {% if songs %}
+            {% for song in songs %}
+                <p><b>{{song.title}}</b> by {{song.artist}}<br>
+                Hits: {{song.hits}}<br>
+                Uploaded on {{song.date_posted}}</p>
+            {% endfor %}
+        {% endif %}
+{% endblock %}
