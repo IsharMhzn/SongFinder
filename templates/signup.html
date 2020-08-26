@@ -4,6 +4,15 @@
     <form method="POST" action="">
         {{ form.hidden_tag() }}
         <div class='input'>
+        {% if form.username.errors %}
+            {% for error in form.username.errors %}
+                {{error}}<br>
+            {% endfor %}
+        {% endif %}
+            {{ form.username.label }}:
+            {{ form.username }}
+        </div>
+        <div class='input'>
         {% if form.email.errors %}
             {% for error in form.email.errors %}
                 {{error}}<br>
@@ -22,8 +31,13 @@
             {{ form.password }}
         </div>
         <div class='input'>
-            {{ form.remember.label }}:
-            {{ form.remember }}
+        {% if form.password_confirm.errors %}
+            {% for error in form.password_confirm.errors %}
+                {{error}}<br>
+            {% endfor %}
+        {% endif %}
+            {{ form.password_confirm.label }}:
+            {{ form.password_confirm }}
         </div>
         <div class='input'>
             {{ form.submit.label }}:
@@ -31,5 +45,5 @@
         </div>
     </form>
     <hr>
-    <a href="{{ url_for('signup') }}">Don't have an account yet? Sign Up</a>
+    <a href="{{ url_for('login') }}">Already have an account? Log In</a>
 {% endblock content %}
