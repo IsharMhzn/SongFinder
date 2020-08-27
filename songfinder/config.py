@@ -1,0 +1,4 @@
+class Config:
+    SECRET_KEY = '138cf4922332d7a0e98fc4ac6067238b2273f336'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///../songfinder.db'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False

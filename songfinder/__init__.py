@@ -1,10 +1,14 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from flask_login import LoginManager
+
+from songfinder.config import Config
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '138cf4922332d7a0e98fc4ac6067238b2273f336'
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../songfinder.db'
+app.config.from_object(Config)
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+login = LoginManager(app)
 
-from songfinder import routes
+from songfinder import routes, models
