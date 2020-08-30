@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    {% if current_user.is_authenticated %}
+        <h1>Welcome to SongFinder, {{ current_user.username }}</h1>
+    {% else %}
         <h1>Welcome to SongFinder</h1>
+    {% endif %}
         {% if songs %}
             {% for song in songs %}
                 <p><b>{{song.title}}</b> by {{song.artist}}<br>

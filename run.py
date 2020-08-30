@@ -1,4 +1,4 @@
-from songfinder import app
+from songfinder import app, db
 from songfinder.models import User, Aid
 
 #flask shell
