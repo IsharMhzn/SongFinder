@@ -3,14 +3,58 @@
 {% block content %}
     {% if current_user.is_authenticated %}
         <h1>Welcome to SongFinder, {{ current_user.username }}</h1>
+        <form method='POST'>
+            {{form.hidden_tag()}}
+            <div class='input'>
+            {% if form.title.errors %}
+                {% for error in form.title.errors %}
+                    {{error}}<br>
+                {% endfor %}
+            {% endif %}
+                {{ form.title.label }}:
+                {{ form.title }}
+            </div>
+            <div class='input'>
+            {% if form.artist.errors %}
+                {% for error in form.artist.errors %}
+                    {{error}}<br>
+                {% endfor %}
+            {% endif %}
+                {{ form.artist.label }}:
+                {{ form.artist }}
+            </div>
+            <div class='input'>
+            {% if form.album.errors %}
+                {% for error in form.album.errors %}
+                    {{error}}<br>
+                {% endfor %}
+            {% endif %}
+                {{ form.album.label }}:
+                {{ form.album }}
+            </div>
+            <div class='input'>
+            {% if form.story.errors %}
+                {% for error in form.story.errors %}
+                    {{error}}<br>
+                {% endfor %}
+            {% endif %}
+                {{ form.story.label }}:
+                {{ form.story }}
+            </div>
+            <div class="input">
+                {{ form.submit.label }}
+                {{ form.submit }}
+            </div>
+        </form>
     {% else %}
         <h1>Welcome to SongFinder</h1>
+        <a href="{{ url_for('login') }}">Login to start posting aids</a>
     {% endif %}
-        {% if songs %}
-            {% for song in songs %}
-                <p><b>{{song.title}}</b> by {{song.artist}}<br>
-                Hits: {{song.hits}}<br>
-                Uploaded on {{song.date_posted}}</p>
-            {% endfor %}
-        {% endif %}
+    {% if aids %}
+        {% for aid in aids %}
+            <p><b>{{aid.title}}</b> by {{aid.artist}}<br>
+            Hits: {{aid.hits}}<br>
+            Uploaded on {{ aid.date_posted.strftime('%Y-%m-%d') }} by <a href="{{ url_for('profile', username=aid.author.username) }}">{{ aid.author.username }}</a></p>
+        {% endfor %}
+    {% endif %}
 {% endblock %}

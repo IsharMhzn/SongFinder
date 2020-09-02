@@ -29,7 +29,7 @@ class Aid(db.Model):
     artist = db.Column(db.String(30), nullable=False)
     album = db.Column(db.String(30), nullable=True)
     story = db.Column(db.String(250), nullable=True)
-    hits = db.Column(db.Integer)
+    hits = db.Column(db.Integer, default=0)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     userid = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 

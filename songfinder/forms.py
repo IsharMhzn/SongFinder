@@ -26,3 +26,10 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember me')
     submit = SubmitField('Log In')
+
+class AidForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    artist = StringField('Artist', validators=[DataRequired()])
+    album = StringField('Album')
+    story = StringField('Story')
+    submit = SubmitField('Post')

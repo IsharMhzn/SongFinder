@@ -1,0 +1,41 @@
+*,
+*::before,
+*::after{
+  margin:0;
+  padding:0;
+}
+
+html{
+  font-family: 'Arial', sans-serif;
+  font-size:15px;
+}
+
+.navbar{
+  background-color: #b6dceb;
+  display:flex;
+  align-items: center;
+  padding: 1.5rem 4rem;  
+}
+
+.navlink{
+    margin-left: auto; 
+  }
+  
+  .navbar-brand{
+    font-size:1.5rem;
+  }
+  
+  ul{
+    list-style: none;
+    display:flex;
+     
+  }
+  
+  a{
+    text-decoration:none;
+  }
+  
+  ul .nav-item{
+    font-size:1.5rem;
+    margin-right: 2rem;
+}

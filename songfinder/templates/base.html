@@ -7,34 +7,28 @@
         {% block title %}
             <title>SongFinder - Suggest songs here</title>
         {% endblock %}
-        
+        <link rel="stylesheet" type='text/css' href="{{ url_for('static', filename='navbar.css') }}">
     </head>
     <body>
-    <nav class="navbar" style="background-color: #e3e6fd;">
-        <a class="navbar-brand" href="{{ url_for('home') }}">SongFinder</a>
-        <div>
+        <nav class="navbar">
+            <a class="navbar-brand" href="{{ url_for('home') }}">SongFinder</a>
+            <form method='GET' action="{{ url_for('search') }}">
+                <input name="q" type='text' placeholder="Search a song, artist, album">
+            </form>
+            <div class="navlink">
             <ul>
-            <li class="nav-item">
-                <a href="{{ url_for('home') }}">Home <span class="sr-only"></span></a>
-            </li>
-            <li class="nav-item">
-                <a href="{{ url_for('about') }}">About</a>
-            </li>
+            <li class="nav-item"><a href="{{ url_for('home') }}">Home </a></li>
+            <li class="nav-item"><a href="{{ url_for('about') }}">About</a></li>
             {% if current_user.is_anonymous %}
-                <li class="nav-item">
-                    <a href="{{ url_for('signup') }}">Sign Up</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ url_for('login') }}">Log In</a>
-                </li>
-            {% else %}  
-                <li class="nav-item">
-                    <a href="{{ url_for('logout') }}">Logout</a>
-                </li>
+            <li class="nav-item"><a href="{{ url_for('signup') }}">Sign Up</a></li>
+            <li class="nav-item"><a href="{{ url_for('login') }}">Log In</a></li>
+            {% else %}
+            <li class="nav-item"><a href="{{ url_for('profile', username=current_user.username) }}">Profile</a></li>
+            <li class="nav-item"><a href="{{ url_for('logout') }}">Logout</a></li>
             {% endif %}
-            </ul>      
-        </div>
-    </nav>
+            </ul>
+            </div>
+            </nav>
     {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
         {% for category, message in messages %}
