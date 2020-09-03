@@ -4,6 +4,7 @@ from songfinder.forms import RegisterForm, LoginForm, AidForm
 from songfinder.models import User, Aid
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
+import os, requests, json
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -73,3 +74,20 @@ def profile(username):
 def search():
     q = request.args.get('q')
     return f"hello{q}"
+
+@app.route('/similar/<artist>')
+def similar(artist):
+    url_search = f"https://api.spotify.com/v1/search?q={artist}&type=artist"
+    auth_token = os.getenv("SPOTIFY_AUTH_TOKEN")
+    headers = {
+        "Authorization": f"Bearer {auth_token}"
+    }
+    response = requests.request("GET", url=url_search, headers=headers).text.encode("utf-8")
+    resp = json.loads(response)
+    entity = resp.get("artists").get("items")[0]
+    artistid = entity.get('id')
+    url_artists = f"https://api.spotify.com/v1/artists/{artistid}/related-artists"
+    response = requests.request("GET", url=url_artists, headers=headers).text.encode("utf-8")
+    resp = json.loads(response)
+    print(resp)
+    return render_template('artist.html', **entity, **resp)

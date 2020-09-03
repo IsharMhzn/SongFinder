@@ -52,9 +52,10 @@
     {% endif %}
     {% if aids %}
         {% for aid in aids %}
-            <p><b>{{aid.title}}</b> by {{aid.artist}}<br>
+            <p><b>{{aid.title}}</b> by <a href="{{ url_for('similar', artist=aid.artist) }}">{{aid.artist}}</a><br>
             Hits: {{aid.hits}}<br>
-            Uploaded on {{ aid.date_posted.strftime('%Y-%m-%d') }} by <a href="{{ url_for('profile', username=aid.author.username) }}">{{ aid.author.username }}</a></p>
+            Uploaded on {{ aid.date_posted.strftime('%Y-%m-%d') }} by <a href="{{ url_for('profile', username=aid.author.username) }}">{{ aid.author.username }}</a>
+            </p>
         {% endfor %}
     {% endif %}
 {% endblock %}

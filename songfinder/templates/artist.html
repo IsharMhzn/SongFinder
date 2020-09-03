@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a href="{{ external_urls.spotify }}"><h3>{{ name }}</h3></a>
+<img src="{{ images[2].url }}"><br>
+Followers on spotify: {{followers.total}}<br>
+{% if artists %}
+<h2>Related artists</h2>
+    {% for artist in artists %}
+    <a href="{{ artist.external_urls.spotify }}"><h3>{{ artist.name }}</h3></a>
+    <img src="{{ artist.images[2].url }}"><br>
+    Followers on spotify: {{artist.followers.total}}
+    {% endfor %}
+{% endif %}
+{% endblock %} 
