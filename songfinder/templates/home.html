@@ -47,11 +47,12 @@
             </div>
         </form>
     {% else %}
-        <h1>Welcome to SongFinder</h1>
-        <a href="{{ url_for('login') }}">Login to start posting aids</a>
+        <h1>Welcome to SongFinder</h1><br>
+        <a href="{{ url_for('login') }}">Login to start posting aids</a><br>
     {% endif %}
     {% if aids %}
         {% for aid in aids %}
+        <br>
             <p><b>{{aid.title}}</b> by <a href="{{ url_for('similar', artist=aid.artist) }}">{{aid.artist}}</a><br>
             Hits: {{aid.hits}}<br>
             Uploaded on {{ aid.date_posted.strftime('%Y-%m-%d') }} by <a href="{{ url_for('profile', username=aid.author.username) }}">{{ aid.author.username }}</a>

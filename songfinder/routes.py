@@ -1,11 +1,13 @@
-from flask import render_template, url_for, flash, redirect, request
 from songfinder import app, db
 from songfinder.forms import RegisterForm, LoginForm, AidForm
 from songfinder.models import User, Aid
+from songfinder.spotify_client import get_bearer_token
+
+from flask import render_template, url_for, flash, redirect, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
-import os, requests, json
 
+import os, requests, json
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -51,7 +53,8 @@ def login():
             flash('Invalid Username or Password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember.data)
-        next_page = request.args.get('next')
+        next_page = request.args.get('next')[1:]
+        print(next_page)
         if not next_page or url_parse(next_page).netloc != '':
             next_page = 'home'
         return redirect(url_for(next_page))
@@ -78,13 +81,15 @@ def search():
 @app.route('/similar/<artist>')
 def similar(artist):
     url_search = f"https://api.spotify.com/v1/search?q={artist}&type=artist"
-    auth_token = os.getenv("SPOTIFY_AUTH_TOKEN")
+    auth_token = get_bearer_token()
     headers = {
         "Authorization": f"Bearer {auth_token}"
     }
     response = requests.request("GET", url=url_search, headers=headers).text.encode("utf-8")
     resp = json.loads(response)
     entity = resp.get("artists").get("items")[0]
+    if not entity:
+        return "Sorry the server's having some technical problems. Please check later."
     artistid = entity.get('id')
     url_artists = f"https://api.spotify.com/v1/artists/{artistid}/related-artists"
     response = requests.request("GET", url=url_artists, headers=headers).text.encode("utf-8")
