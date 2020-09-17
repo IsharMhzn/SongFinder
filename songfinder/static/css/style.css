@@ -28,8 +28,8 @@ body {
 
 .sidebar{
 	position: fixed;
-	right:-17rem;
-	width: 17rem;
+	right:-19rem;
+	width: 19rem;
 	height: 100%;
 	background: var(--black1);
 	transition: .3s ease; 
@@ -111,7 +111,7 @@ ul li:hover a{
 	padding-bottom:.5rem;
 	color: white;
 	outline: none;
-
+	max-width: 15rem;
 }
 
 .nav-search-bar a{
@@ -180,6 +180,7 @@ main{
 	width: calc(100vw - 70rem);
 	outline: none;
 	border: none;
+	max-width: 25rem;
 }
 
 .search-bar a{

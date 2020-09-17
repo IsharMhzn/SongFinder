@@ -1,13 +1,13 @@
 from songfinder import app, db
 from songfinder.forms import RegisterForm, LoginForm, AidForm
-from songfinder.models import User, Aid
-from songfinder.spotify_client import get_bearer_token
+from songfinder.models import User, Aid, Spotify
+from songfinder.spotify_client import get_bearer_token, authorize_account
 
 from flask import render_template, url_for, flash, redirect, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
-import os, requests, json
+import os, requests, json, threading
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
@@ -15,11 +15,12 @@ def home():
     if current_user.is_authenticated:
         form = AidForm()
         if form.validate_on_submit():
+            # TODO: to save the genre
             userid = current_user.id
             aid = Aid(title=form.title.data, artist=form.artist.data, album=form.album.data, story=form.story.data, userid=userid)
             db.session.add(aid)
             db.session.commit()
-            flash('Your aid has been posted safe and sound.', 'success')
+            flash('Your aid has been posted safe and sound.')
             return redirect(url_for('home'))
         return render_template('home.html', aids=aids, form=form)
     return render_template('home.html', aids=aids)
@@ -53,9 +54,9 @@ def login():
             flash('Invalid Username or Password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember.data)
-        next_page = request.args.get('next')[1:]
-        print(next_page)
-        if not next_page or url_parse(next_page).netloc != '':
+        if next_page := request.args.get('next'):
+            next_page = next_page[1:]
+        elif not next_page or url_parse(next_page).netloc != '':
             next_page = 'home'
         return redirect(url_for(next_page))
     return render_template('login.html', form=form)
@@ -71,7 +72,11 @@ def logout():
 def profile(username):
     user = User.query.filter_by(username=username).first_or_404()
     aids = Aid.query.filter_by(userid=user.id)
-    return render_template('profile.html', user=user, aids=aids)
+    if spotc := Spotify.query.filter_by(userid=user.id).first():
+        spotc = True
+    else:
+        spotc = False
+    return render_template('profile.html', user=user, aids=aids, spotc=spotc)
 
 @app.route('/search')
 def search():
@@ -94,5 +99,18 @@ def similar(artist):
     url_artists = f"https://api.spotify.com/v1/artists/{artistid}/related-artists"
     response = requests.request("GET", url=url_artists, headers=headers).text.encode("utf-8")
     resp = json.loads(response)
-    print(resp)
     return render_template('artist.html', **entity, **resp)
+
+@app.route('/spotify/authorize/')
+def connect_spotify():
+    if code:=request.args.get('code'):
+        userid = current_user.id
+        if not Spotify.query.filter_by(userid=userid).first():
+            s = Spotify(userid=userid, code=code)
+            db.session.add(s)
+            db.session.commit()
+        else:
+            flash('You are already connected to spotify')
+        return redirect(url_for('home'))
+    url = authorize_account()
+    return redirect(url)

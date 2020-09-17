@@ -180,6 +180,7 @@ main{
 	width: calc(100vw - 70rem);
 	outline: none;
 	border: none;
+	max-width: 12rem;
 }
 
 .search-bar a{

@@ -16,3 +16,19 @@ def get_bearer_token():
 
     r = requests.post('https://accounts.spotify.com/api/token', data=token_data, headers=headers)
     return r.json().get('access_token')
+
+
+def authorize_account():
+    client_id = os.getenv("SPOTIFY_CLIENT_ID")
+    
+    query = {
+        'client_id': client_id,
+        'response_type': 'code',
+        'redirect_uri': 'http://127.0.0.1:5000/spotify/authorize',
+        'scope': 'user-top-read user-read-recently-played',
+        'show_dialog': True,
+    }
+
+    r = requests.get('https://accounts.spotify.com/authorize', params=query)
+    return r.url
+

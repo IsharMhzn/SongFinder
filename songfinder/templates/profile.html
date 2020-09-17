@@ -11,4 +11,9 @@
         {% endfor %}
         <br>
     {% endif %}
+    {% if not spotc %}
+    <a href=" {{ url_for('connect_spotify') }} ">Want to connect to spotify?</a>
+    {% else %}
+    You are connected to your spotify account.
+    {% endif %}
 {% endblock %}
