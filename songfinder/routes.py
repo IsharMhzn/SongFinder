@@ -1,7 +1,7 @@
 from songfinder import app, db
 from songfinder.forms import RegisterForm, LoginForm, AidForm
 from songfinder.models import User, Aid, Spotify
-from songfinder.spotify_client import get_bearer_token, authorize_account
+from songfinder.spotify_client import get_bearer_token, authorize_account, get_genre
 
 from flask import render_template, url_for, flash, redirect, request
 from flask_login import current_user, login_user, logout_user, login_required
@@ -16,9 +16,10 @@ def home():
     if current_user.is_authenticated:
         form = AidForm()
         if form.validate_on_submit():
-            # TODO: to save the genre
+            # TODO:thread the request to spotify so the posting wont take time
+            genre = get_genre(form.artist.data.lower())
             userid = current_user.id
-            aid = Aid(title=form.title.data.lower(), artist=form.artist.data.lower(), album=form.album.data.lower(), story=form.story.data.lower(), userid=userid)
+            aid = Aid(title=form.title.data.lower(), artist=form.artist.data.lower(), album=form.album.data.lower(), story=form.story.data.lower(), genre=genre, userid=userid)
             db.session.add(aid)
             db.session.commit()
             flash('Your aid has been posted safe and sound.')
@@ -81,11 +82,21 @@ def profile(username):
 
 @app.route('/search', methods=['GET'])
 def search():
-    search = request.args.get('q-search')
-    aids_t = Aid.query.filter_by(title=search)
-    aids_g = Aid.query.filter_by(genre=search)
-    aids_a = Aid.query.filter_by(artist=search)
-    return render_template('result.html', aids_t=aids_t, aids_g=aids_g, aids_a=aids_a)
+    search = request.args.get('q-search').lower()
+    aids = Aid.query.all()
+    match = []
+    for aid in aids:
+        try:
+            if search in aid.title.lower():
+                match.append(aid)
+            elif search in aid.genre.lower():
+                match.append(aid)
+            elif search in aid.artist.lower():
+                match.append(aid)
+        except AttributeError:
+            pass
+    
+    return render_template('result.html', aids=match)
 
 @app.route('/similar/<artist>')
 def similar(artist):

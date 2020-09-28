@@ -1,26 +1,8 @@
 {% extends 'base.html' %}
   
 {% block content %}
-{% if aids_t %}
-{% for aid in aids_t %}
-    <br>
-        <p><b>{{aid.title}}</b> by <a href="{{ url_for('similar', artist=aid.artist) }}">{{aid.artist}}</a><br>
-        Hits: {{aid.hits}}<br>
-        Uploaded on {{ aid.date_posted.strftime('%Y-%m-%d') }} by <a href="{{ url_for('profile', username=aid.author.username) }}">{{ aid.author.username }}</a>
-        </p>
-{% endfor %}
-{% endif %}
-{% if aids_a %}
-{% for aid in aids_a %}
-    <br>
-        <p><b>{{aid.title}}</b> by <a href="{{ url_for('similar', artist=aid.artist) }}">{{aid.artist}}</a><br>
-        Hits: {{aid.hits}}<br>
-        Uploaded on {{ aid.date_posted.strftime('%Y-%m-%d') }} by <a href="{{ url_for('profile', username=aid.author.username) }}">{{ aid.author.username }}</a>
-        </p>
-{% endfor %}
-{% endif %}
-{% if aids_g %}
-{% for aid in aids_g %}
+{% if aids %}
+{% for aid in aids %}
     <br>
         <p><b>{{aid.title}}</b> by <a href="{{ url_for('similar', artist=aid.artist) }}">{{aid.artist}}</a><br>
         Hits: {{aid.hits}}<br>

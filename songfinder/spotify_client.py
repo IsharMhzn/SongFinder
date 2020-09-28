@@ -17,6 +17,21 @@ def get_bearer_token():
     r = requests.post('https://accounts.spotify.com/api/token', data=token_data, headers=headers)
     return r.json().get('access_token')
 
+def get_genre(artist):
+    url_search = f"https://api.spotify.com/v1/search?q={artist}&type=artist"
+    auth_token = get_bearer_token()
+    headers = {
+        "Authorization": f"Bearer {auth_token}"
+    }
+    response = requests.request("GET", url=url_search, headers=headers).text.encode("utf-8")
+    r = json.loads(response)
+    try:
+        genre = r.get('artists').get('items')[0].get('genres')
+    except IndexError:
+        return "Unidentified"
+    genres = ','.join(genre)
+    return genres
+
 
 def authorize_account():
     client_id = os.getenv("SPOTIFY_CLIENT_ID")
