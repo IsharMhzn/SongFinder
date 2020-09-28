@@ -29,8 +29,8 @@
             {% endif %}
 		</ul>
 		<div class="nav-search-bar">
-			<input type="text" name="" placeholder="Type to Search">
-			<a href="#"><i class="fas fa-search" ></i></a>
+			<input type="text" name="q" placeholder="Type to Search">
+			<a href="{{ url_for('search') }}"><i class="fas fa-search" ></i></a>
 		</div>
 	</nav>
 	<main>
@@ -42,8 +42,10 @@
                     </a>
 				</div>
 				<div class="search-bar">
-					<input type="text" name="" placeholder="Type to Search">
-					<a href="#"><i class="fas fa-search" ></i></a>
+				<form method='get' action="{{ url_for('search') }}">
+					<input type="text" name="q-search" placeholder="Type to Search">
+					<input type='submit' value='search'>
+				</form>
 				</div>
 				<div class="menu-icons">
 					<label for="check">

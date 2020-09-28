@@ -12,12 +12,13 @@ import os, requests, json, threading
 @app.route('/', methods=['GET', 'POST'])
 def home():
     aids = Aid.query.all()
+    print(aids)
     if current_user.is_authenticated:
         form = AidForm()
         if form.validate_on_submit():
             # TODO: to save the genre
             userid = current_user.id
-            aid = Aid(title=form.title.data, artist=form.artist.data, album=form.album.data, story=form.story.data, userid=userid)
+            aid = Aid(title=form.title.data.lower(), artist=form.artist.data.lower(), album=form.album.data.lower(), story=form.story.data.lower(), userid=userid)
             db.session.add(aid)
             db.session.commit()
             flash('Your aid has been posted safe and sound.')
@@ -75,13 +76,16 @@ def profile(username):
     if spotc := Spotify.query.filter_by(userid=user.id).first():
         spotc = True
     else:
-        spotc = False
+        spotc = False if user==User.query.filter_by(id=current_user.id).first_or_404() else True
     return render_template('profile.html', user=user, aids=aids, spotc=spotc)
 
-@app.route('/search')
+@app.route('/search', methods=['GET'])
 def search():
-    q = request.args.get('q')
-    return f"hello{q}"
+    search = request.args.get('q-search')
+    aids_t = Aid.query.filter_by(title=search)
+    aids_g = Aid.query.filter_by(genre=search)
+    aids_a = Aid.query.filter_by(artist=search)
+    return render_template('result.html', aids_t=aids_t, aids_g=aids_g, aids_a=aids_a)
 
 @app.route('/similar/<artist>')
 def similar(artist):
