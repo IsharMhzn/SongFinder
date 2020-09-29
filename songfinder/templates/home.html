@@ -67,10 +67,8 @@
         {% endfor %}
     {% endif %}
     <br>
-    <strong>Chat but no chat</strong>
-    <ul id='Messages'></ul>
-    <input type='text' id='Message'>
-    <button id='sendbutton'>Send</button>
+    <a href="{{url_for('chat')}}"><strong>Click here to join the chat room to talk with fellow listeners.</strong></a>
+    
     <script type='text/javascript'>
         $(document).ready(function(){
             var socket = io.connect('http://127.0.0.1:5000')

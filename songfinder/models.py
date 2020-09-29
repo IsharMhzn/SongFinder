@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, time
 from songfinder import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -43,6 +43,12 @@ class Spotify(db.Model):
     code = db.Column(db.String(100), nullable=False)
     date_linked = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
+class Chat(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    username = db.Column(db.String(20), nullable=False)
+    message = db.Column(db.String(150), nullable=False)
+    time = db.Column(db.Time, nullable=False, default=datetime.utcnow().time)
 
 @login.user_loader
 def load_user(id):

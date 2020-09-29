@@ -1,6 +1,6 @@
 from songfinder import app, db, socketapp
 from songfinder.forms import RegisterForm, LoginForm, AidForm
-from songfinder.models import User, Aid, Spotify
+from songfinder.models import User, Aid, Spotify, Chat
 from songfinder.spotify_client import get_bearer_token, authorize_account, get_genre
 
 from flask import render_template, url_for, flash, redirect, request
@@ -131,10 +131,27 @@ def connect_spotify():
     url = authorize_account()
     return redirect(url)
 
+@app.route('/chat/room')
+def chat():
+    return render_template('chatroom.html')
+
 # @socketapp.on('message')
 # def handleMessage(msg):
 #     print('Message: ' + msg)
 #     send(msg, broadcast=True)
+
+@socketapp.on('message')
+def handleMessages(message):
+    if current_user.is_anonymous:
+        username = 'Anonymous User'
+        chat = Chat(username=username, message=message)
+    else:
+        username = current_user.username
+        chat = Chat(username=username, message=message, userid=current_user.id)
+    db.session.add(chat)
+    db.session.commit()
+    msg = f"{username}: {message}"
+    send(msg, broadcast=True)
 
 @socketapp.on('hit')
 def handle_hit(buttonid, hit):
