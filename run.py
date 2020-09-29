@@ -1,4 +1,4 @@
-from songfinder import app, db
+from songfinder import socketapp, db, app
 from songfinder.models import User, Aid
 
 #flask shell
@@ -7,4 +7,4 @@ def make_shell_context():
     return {'db': db, 'User': User, 'Aid': Aid}
 
 if __name__=="__main__":
-    app.run(debug=True)
+    socketapp.run(app)

@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 
+{% block title %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js" integrity="sha512-v8ng/uGxkge3d1IJuEo6dJP8JViyvms0cly9pnbfRxT6/31c3dRWxIiwGnMSWwZjHKOuY3EVmijs7k1jz/9bLA==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+{% endblock title %}
+
+
 {% block content %}
     {% if current_user.is_authenticated %}
         <h1>Welcome to SongFinder, {{ current_user.username }}</h1>
@@ -54,9 +60,54 @@
         {% for aid in aids %}
         <br>
             <p><b>{{aid.title}}</b> by <a href="{{ url_for('similar', artist=aid.artist) }}">{{aid.artist}}</a><br>
-            Hits: {{aid.hits}}<br>
+            <small id="hits-{{aid.id}}">Hits: {{aid.hits}}</small><br>
+            <button id="hitbutton-{{aid.id}}" class="hitbutton">Hit</button>
             Uploaded on {{ aid.date_posted.strftime('%Y-%m-%d') }} by <a href="{{ url_for('profile', username=aid.author.username) }}">{{ aid.author.username }}</a>
             </p>
         {% endfor %}
     {% endif %}
+    <br>
+    <strong>Chat but no chat</strong>
+    <ul id='Messages'></ul>
+    <input type='text' id='Message'>
+    <button id='sendbutton'>Send</button>
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            var socket = io.connect('http://127.0.0.1:5000')
+
+            /*socket.on('connect', function(){
+                console.log('Connected');
+                socket.send('A user has connected.');
+            });
+
+            socket.on('message', function(msg){
+                $("#Messages").append("<li>"+msg+"</li>");
+            });
+
+            $('#sendbutton').on('click', function(){
+                socket.send($("#Message").val());
+                $("#Message").val("");
+            });*/
+
+            $(".hitbutton").on('click', function(){
+                socket.emit('hit', $(this).attr('id'), this.innerHTML); // this.id also works
+                if(this.innerHTML=='Hit'){
+                    this.innerHTML = 'Unhit';
+                }
+                else{
+                    this.innerHTML = 'Hit';
+                }
+            });
+
+            socket.on('hit_results', function(result){
+                console.log('#hits-'+result.id)
+                //$('#hits-'+result.id).innerHTML = "Hits: "+ result.hits; //idk why this isnt working
+                document.getElementById('hits-'+result.id).innerHTML = "Hits: "+result.hits;
+            });
+
+            socket.on('redirect', function(data){
+                window.location = data.url;
+            });
+        });
+    </script>
 {% endblock %}

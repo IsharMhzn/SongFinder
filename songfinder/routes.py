@@ -1,10 +1,11 @@
-from songfinder import app, db
+from songfinder import app, db, socketapp
 from songfinder.forms import RegisterForm, LoginForm, AidForm
 from songfinder.models import User, Aid, Spotify
 from songfinder.spotify_client import get_bearer_token, authorize_account, get_genre
 
 from flask import render_template, url_for, flash, redirect, request
 from flask_login import current_user, login_user, logout_user, login_required
+from flask_socketio import send, emit
 from werkzeug.urls import url_parse
 
 import os, requests, json, threading
@@ -129,3 +130,24 @@ def connect_spotify():
         return redirect(url_for('home'))
     url = authorize_account()
     return redirect(url)
+
+# @socketapp.on('message')
+# def handleMessage(msg):
+#     print('Message: ' + msg)
+#     send(msg, broadcast=True)
+
+@socketapp.on('hit')
+def handle_hit(buttonid, hit):
+    if not current_user.is_anonymous:
+        aid_id = buttonid.split('-')[-1]
+        print(f"Aid {aid_id} is clicked.")
+        aid = Aid.query.filter_by(id=aid_id).first()
+        if hit=='Hit':
+            aid.hits += 1
+        else:
+            aid.hits -= 1
+        db.session.commit()
+        emit('hit_results', {'id': aid_id, 'hits': aid.hits}, broadcast=True)
+    else:
+        flash('You have to logged in.')
+        emit('redirect', {'url': url_for('login')})
