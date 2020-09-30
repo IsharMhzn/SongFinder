@@ -1,7 +1,8 @@
-from songfinder import app, db, socketapp
+from songfinder import app, db, socketapp, task_q
 from songfinder.forms import RegisterForm, LoginForm, AidForm
 from songfinder.models import User, Aid, Spotify, Chat
 from songfinder.spotify_client import get_bearer_token, authorize_account, get_genre
+from songfinder.background import load_genres_task
 
 from flask import render_template, url_for, flash, redirect, request
 from flask_login import current_user, login_user, logout_user, login_required
@@ -18,11 +19,13 @@ def home():
         form = AidForm()
         if form.validate_on_submit():
             # TODO:thread the request to spotify so the posting wont take time
-            genre = get_genre(form.artist.data.lower())
+            #Error
             userid = current_user.id
-            aid = Aid(title=form.title.data.lower(), artist=form.artist.data.lower(), album=form.album.data.lower(), story=form.story.data.lower(), genre=genre, userid=userid)
+            aid = Aid(title=form.title.data.lower(), artist=form.artist.data.lower(), album=form.album.data.lower(), story=form.story.data.lower(), userid=userid)
             db.session.add(aid)
             db.session.commit()
+            # task_q.enqueue(load_genres_task, form.artist.data.lower(), aid.id)
+            # Time data error in rq worker 
             flash('Your aid has been posted safe and sound.')
             return redirect(url_for('home'))
         return render_template('home.html', aids=aids, form=form)
