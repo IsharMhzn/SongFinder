@@ -1,4 +1,10 @@
 # SongFinder
-SongFinder will maybe be an intuitive website for music listeners all over the world to come and find or suggest songs of their like based on genres, moods and other music terms than i dont know of(yet).
 
-Also, Mr. Scratchy maybe this sites Mascot :D.
+Flask project: Making a website using flask, flask_socketio(left to implement) and spotify API to create a place to recommend songs and find more. 
+
+Mr. Scratchy owns this site. 
+
+## TODO:
+* Create a thread to check the genre and save it to aids.
+* Create playlist for spotify account. (Connected to spotify but i dont think its complete)
+* Implement socketio for hits and comments

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, time
 from songfinder import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -30,11 +30,25 @@ class Aid(db.Model):
     album = db.Column(db.String(30), nullable=True)
     story = db.Column(db.String(250), nullable=True)
     hits = db.Column(db.Integer, default=0)
+    genre = db.Column(db.String(20), nullable=True)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     userid = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
         return f"Aid('{self.title}', '{self.artist}')"
+
+class Spotify(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    code = db.Column(db.String(100), nullable=False)
+    date_linked = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+class Chat(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    username = db.Column(db.String(20), nullable=False)
+    message = db.Column(db.String(150), nullable=False)
+    time = db.Column(db.Time, nullable=False, default=datetime.utcnow().time)
 
 @login.user_loader
 def load_user(id):
