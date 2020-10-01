@@ -2,7 +2,7 @@ from songfinder import app, db, socketapp, task_q
 from songfinder.forms import RegisterForm, LoginForm, AidForm
 from songfinder.models import User, Aid, Spotify, Chat
 from songfinder.spotify_client import get_bearer_token, authorize_account, get_genre
-from songfinder.background import load_genres_task
+from songfinder.background import load_genres_task, load_all_aids_genre
 
 from flask import render_template, url_for, flash, redirect, request
 from flask_login import current_user, login_user, logout_user, login_required
@@ -24,6 +24,7 @@ def home():
             aid = Aid(title=form.title.data.lower(), artist=form.artist.data.lower(), album=form.album.data.lower(), story=form.story.data.lower(), userid=userid)
             db.session.add(aid)
             db.session.commit()
+            task_q.enqueue(load_all_aids_genre)
             # task_q.enqueue(load_genres_task, form.artist.data.lower(), aid.id)
             # Time data error in rq worker 
             flash('Your aid has been posted safe and sound.')
@@ -138,6 +139,11 @@ def connect_spotify():
 def chat():
     return render_template('chatroom.html')
 
+@app.route('/aid/<id>')
+def aid_view(id):
+    aid = Aid.query.filter_by(id=id).first()
+    return render_template('aid_view.html', aid=aid)
+
 # @socketapp.on('message')
 # def handleMessage(msg):
 #     print('Message: ' + msg)
@@ -171,3 +177,4 @@ def handle_hit(buttonid, hit):
     else:
         flash('You have to logged in.')
         emit('redirect', {'url': url_for('login')})
+

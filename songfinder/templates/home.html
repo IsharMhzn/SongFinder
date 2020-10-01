@@ -58,12 +58,14 @@
     {% endif %}
     {% if aids %}
         {% for aid in aids %}
+        <div class='aid-post'>
         <br>
-            <p><b>{{aid.title}}</b> by <a href="{{ url_for('similar', artist=aid.artist) }}">{{aid.artist}}</a><br>
+            <p><a href="{{ url_for('aid_view', id=aid.id )}}"><b>{{aid.title}}</b></a> by <a href="{{ url_for('similar', artist=aid.artist) }}">{{aid.artist}}</a><br>
             <small id="hits-{{aid.id}}">Hits: {{aid.hits}}</small><br>
             <button id="hitbutton-{{aid.id}}" class="hitbutton">Hit</button>
             Uploaded on {{ aid.date_posted.strftime('%Y-%m-%d') }} by <a href="{{ url_for('profile', username=aid.author.username) }}">{{ aid.author.username }}</a>
             </p>
+        </div>
         {% endfor %}
     {% endif %}
     <br>
