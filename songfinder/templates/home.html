@@ -7,6 +7,22 @@
 
 
 {% block content %}
+<section class="black">
+			<div class="container width1400">
+				<div class="row">
+					<div class="col2">
+						<h1>Welcome to SongFinder</h1>
+						<h3>Discover your love for music</h3>
+						<button><a>Search Now</a></button>
+					</div>
+					<div class="col2">
+						<img src="{{ url_for('static', filename='images/cover1.jpg') }}">
+					</div>
+				</div>
+				
+			</div>
+			
+		</section>
     {% if current_user.is_authenticated %}
         <h1>Welcome to SongFinder, {{ current_user.username }}</h1>
         <form method='POST'>
@@ -62,7 +78,7 @@
         <br>
             <p><a href="{{ url_for('aid_view', id=aid.id )}}"><b>{{aid.title}}</b></a> by <a href="{{ url_for('similar', artist=aid.artist) }}">{{aid.artist}}</a><br>
             <small id="hits-{{aid.id}}">Hits: {{aid.hits}}</small><br>
-            <button id="hitbutton-{{aid.id}}" class="hitbutton">Hit</button>
+            <button id="hitbutton-{{aid.id}}" class="hitbutton"><i class="fas fa-fire-alt"></i><span style='display: none;'>Hit</span></button>
             Uploaded on {{ aid.date_posted.strftime('%Y-%m-%d') }} by <a href="{{ url_for('profile', username=aid.author.username) }}">{{ aid.author.username }}</a>
             </p>
         </div>
@@ -89,14 +105,21 @@
                 $("#Message").val("");
             });*/
 
-            $(".hitbutton").on('click', function(){
-                socket.emit('hit', $(this).attr('id'), this.innerHTML); // this.id also works
-                if(this.innerHTML=='Hit'){
-                    this.innerHTML = 'Unhit';
+            $(".hitbutton").on('click', function(event){
+                console.log(event.target)
+                target = event.target
+                if(target.tagName == 'I'){
+                    target = target.parentNode;
+                }
+                socket.emit('hit', target.id, target.innerHTML); // this.id also works
+                node = target.childNodes[1]
+                if(node.innerHTML=='Hit'){
+                    node.innerHTML = 'Unhit';
                 }
                 else{
-                    this.innerHTML = 'Hit';
+                    node.innerHTML = 'Hit';
                 }
+                target.classList.toggle('click')
             });
 
             socket.on('hit_results', function(result){

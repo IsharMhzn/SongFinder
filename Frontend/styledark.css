@@ -254,7 +254,7 @@ main{
 
 .row .col2:nth-child(1){
 	flex-basis: 40%;
-	padding-left: 7rem;:;
+	padding-left: 7rem;
 	color: var(--alabaster);
 }
 

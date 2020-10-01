@@ -3,8 +3,9 @@
 <head>
 	<meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>SongFinder - Suggest songs here</title>
-	<!---Font Awesome CDN--->
+	<!---Font Awesome CDN---->
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" integrity="sha384-HzLeBuhoNPvSl5KYnjx0BT+WB0QEEqLprO+NBkkk5gbc67FTaL7XIGa2w1L0Xbgc" crossorigin="anonymous">
+	
 	<!---- Google Fonts---------->
 	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
 	<!---Normalize CSS---->
@@ -65,9 +66,7 @@
             {% endfor %}
         {% endif %}
     {% endwith %}
-    <div>
         {% block content %}
         {% endblock %}
-    </div>
 </body>
 </html>

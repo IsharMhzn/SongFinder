@@ -5,9 +5,11 @@
   	--font-weight-bold: 700;
 
   	--athens-gray: #e9e8ec;
+  	--alabaster: #f8f8f8;
   	--dune: #242221;
   	--orange1: #e67207;
   	--black1:#2b2b2a;
+  	--gray1:#e8e8e8;
 }
 
 *{
@@ -25,7 +27,7 @@ body {
   color: var(--dune);
 
 }
-
+/*---------------------------------------NAVIGATION MENU---------------------------------------*/
 .sidebar{
 	position: fixed;
 	right:-19rem;
@@ -37,7 +39,7 @@ body {
 
 .sidebar header{
 	font-size:28px;
-	color: white;
+	color: var(--alabaster);
 	text-align: center;
 	line-height: 6.1rem;
 	background: var(--orange1);
@@ -54,7 +56,7 @@ body {
 	width: 100%;
 	line-height: 4.5rem;
 	font-size:18px;
-	color: white;
+	color: var(--alabaster);
 	padding-left:2rem;
 	text-decoration: none;
 	border-top:1px solid rgba(225,255,255,.1);
@@ -103,19 +105,20 @@ ul li:hover a{
 	margin: 1rem;
 	position: absolute;
 	bottom: 0;
+
 }
 .nav-search-bar input[type=text]{
 	border:none;
 	background: transparent;
 	border-bottom: 1px solid black;
 	padding-bottom:.5rem;
-	color: white;
+	color: var(--alabaster);
 	outline: none;
 	max-width: 15rem;
 }
 
 .nav-search-bar a{
-	color: white;
+	color: var(--alabaster);
 }
 
 #check:checked ~.sidebar{
@@ -144,17 +147,17 @@ main{
 .menu-icons #btn:hover{
 	background:var(--orange1);
 	border-radius: 10px;
-	color: white;
+	color: var(--alabaster);
 }
 
-/*Navigation Header*/
+/*---------------------------------------NAVIGATION HEADER---------------------------------------*/
 .width1300{
 	max-width: 1300px;
 	margin: auto;
 }
 
 .white{
-	background: white;
+	background: var(--alabaster);
 }
 .container{
 	display: flex;
@@ -181,6 +184,7 @@ main{
 	outline: none;
 	border: none;
 	max-width: 25rem;
+	background: transparent;
 }
 
 .search-bar a{
@@ -191,7 +195,7 @@ main{
 .search-bar a:hover{
 	border-radius: 50%;
 	background: var(--orange1);
-	color: white;
+	color: var(--alabaster);
 }
 
 @media screen and (max-width: 1350px){
@@ -223,4 +227,135 @@ main{
 		margin-left: auto;
 	}
 
+}
+
+/*---------------------------------------COVER---------------------------------------*/
+.width1400{
+	max-width: 1400px;
+	margin: auto;
+}
+
+.black{
+	background: black;
+}
+
+.row{
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	flex-wrap: wrap;
+}
+
+.col2{
+	min-width: 300px;
+}
+
+.row .col2:nth-child(1){
+	flex-basis: 40%;
+	padding-left: 7rem;
+	color: var(--alabaster);
+}
+
+.row .col2:nth-child(1) h1{
+	line-height: 3.5rem;
+	text-transform: uppercase;
+	font-size: 2.62rem;
+	margin: 25px 0;
+	letter-spacing: 3px;
+}
+
+.row .col2:nth-child(1) h3{
+	color: var(--gray1);
+	font-weight: var(--font-weight-regular);
+}
+
+button{
+	margin: 40px auto;
+	line-height: 40px;
+	width: 150px;
+	background: var(--orange1);
+	border-radius: 30px;
+	border: 1px solid var(--orange1);
+	color: var(--alabaster);
+	font-weight: var(--font-weight-bold);
+	transition: .5s;
+}
+
+.hitbutton {
+	color: black;
+	margin: auto 10px;
+	border: none;
+	background: transparent;
+	outline: none;
+	font: 1.2rem;
+	width: 50px;
+}
+
+/* .hitbutton .fa-fire-alt {
+	-webkit-touch-callout: none; 
+    -webkit-user-select: none;
+     -khtml-user-select: none; 
+       -moz-user-select: none;  
+        -ms-user-select: none; 
+            user-select: none;
+} */
+
+.click{
+	color: var(--orange1);
+}
+
+button:hover{
+	background: var(--alabaster);
+	color: var(--orange1);
+	transform: scale(1.05);
+	border:none;
+}
+
+.container .col2:nth-child(2){
+	flex-basis: 60%;
+}
+.col2 img{
+	max-width: 100%;
+	padding: 50px 0;
+}
+
+
+@media screen and (max-width: 1100px){
+	.row .col2:nth-child(1){
+		padding-left: 0px;
+	}
+}
+@media screen and (max-width: 800px){
+	.row{
+		text-align: center;
+	}
+
+	.row .col2{
+		margin: 50px;
+	}
+	.row .col2:nth-child(1){
+		flex-basis: 100%;
+	}
+	.row .col2:nth-child(2){
+		flex-basis: 100%;
+	}
+	.row .col2:nth-child(2) img{
+		padding:0;
+		width: 100%;
+		height: 500px;
+		max-width: none;
+		object-fit: cover;
+	}
+}
+
+@media screen and (max-width: 500px){
+	.row .col2{
+		margin: 50px 0;
+	}
+}
+
+@media screen and (max-width: 350px){
+	.container{
+		padding: 0 20px;
+	}
 }
