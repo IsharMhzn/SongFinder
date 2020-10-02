@@ -1,6 +1,6 @@
 from songfinder import app, db, socketapp, task_q
 from songfinder.forms import RegisterForm, LoginForm, AidForm
-from songfinder.models import User, Aid, Spotify, Chat
+from songfinder.models import User, Aid, Spotify, Chat, Hit
 from songfinder.spotify_client import get_bearer_token, authorize_account, get_genre
 from songfinder.background import load_genres_task, load_all_aids_genre
 
@@ -29,8 +29,19 @@ def home():
             # Time data error in rq worker 
             flash('Your aid has been posted safe and sound.')
             return redirect(url_for('home'))
+        aids = find_hits(current_user, aids)
         return render_template('home.html', aids=aids, form=form)
     return render_template('home.html', aids=aids)
+
+def find_hits(current_user, aids):
+    for aid in aids:
+        for hit in aid.hits:
+            if hit.userid == current_user.id:
+                aid.hitted = True
+                break
+        else:
+            aid.hitted = False
+    return aids
 
 @app.route('/about')
 @login_required
@@ -100,7 +111,7 @@ def search():
                 match.append(aid)
         except AttributeError:
             pass
-    
+    aids = find_hits(current_user, match)
     return render_template('result.html', aids=match)
 
 @app.route('/similar/<artist>')
@@ -163,18 +174,23 @@ def handleMessages(message):
     send(msg, broadcast=True)
 
 @socketapp.on('hit')
-def handle_hit(buttonid, hit):
+def handle_hit(buttonid):
     if not current_user.is_anonymous:
         aid_id = buttonid.split('-')[-1]
         print(f"Aid {aid_id} is clicked.")
         aid = Aid.query.filter_by(id=aid_id).first()
-        if hit=='Hit':
-            aid.hits += 1
+        hits = aid.hits
+        for hit in hits:
+            if current_user.id == hit.userid:
+                print('Already hit')
+                db.session.delete(hit)
+                break
         else:
-            aid.hits -= 1
+            print('Hit okay!')
+            h = Hit(userid=current_user.id, aidid=aid_id)
+            db.session.add(h)
         db.session.commit()
-        emit('hit_results', {'id': aid_id, 'hits': aid.hits}, broadcast=True)
+        emit('hit_results', {'id': aid_id, 'hits': len(aid.hits)}, broadcast=True)
     else:
-        flash('You have to logged in.')
-        emit('redirect', {'url': url_for('login')})
+        emit('redirect', {'url': url_for('login'), 'message': 'You have to be logged in.'})
 

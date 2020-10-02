@@ -19,3 +19,4 @@ rds = redis.Redis()
 task_q = rq.Queue(connection=rds)
 
 from songfinder import routes, models
+

@@ -29,7 +29,7 @@ class Aid(db.Model):
     artist = db.Column(db.String(30), nullable=False)
     album = db.Column(db.String(30), nullable=True)
     story = db.Column(db.String(250), nullable=True)
-    hits = db.Column(db.Integer, default=0)
+    hits = db.relationship('Hit', backref='aid', lazy=True)
     genre = db.Column(db.String(20), nullable=True)
     date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     userid = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -37,11 +37,13 @@ class Aid(db.Model):
     def __repr__(self):
         return f"Aid('{self.title}', '{self.artist}')"
 
+
 class Spotify(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     code = db.Column(db.String(100), nullable=False)
     date_linked = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
 
 class Chat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -50,6 +52,14 @@ class Chat(db.Model):
     message = db.Column(db.String(150), nullable=False)
     time = db.Column(db.Time, nullable=False, default=datetime.utcnow().time)
 
+
+class Hit(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    aidid = db.Column(db.Integer, db.ForeignKey('aid.id'), nullable=False)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+

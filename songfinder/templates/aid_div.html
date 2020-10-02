@@ -1,0 +1,12 @@
+<div class='aid-post'>
+<br>
+    <p><a href="{{ url_for('aid_view', id=aid.id )}}"><b>{{aid.title}}</b></a> by <a href="{{ url_for('similar', artist=aid.artist) }}">{{aid.artist}}</a><br>
+    <small id="hits-{{aid.id}}">Hits: {{aid.hits|length}}</small><br>
+    {% if not aid.hitted %}
+    <button id="hitbutton-{{aid.id}}" class="hitbutton"><i class="fas fa-fire-alt"></i></button>
+    {% else %}
+    <button id="hitbutton-{{aid.id}}" class="hitbutton click"><i class="fas fa-fire-alt"></i></button>
+    {% endif %}
+    Uploaded on {{ aid.date_posted.strftime('%Y-%m-%d') }} by <a href="{{ url_for('profile', username=aid.author.username) }}">{{ aid.author.username }}</a>
+    </p>
+</div>
