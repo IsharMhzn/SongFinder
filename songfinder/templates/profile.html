@@ -5,9 +5,7 @@
     <hr>
     {% if aids %}
         {% for aid in aids %}
-            <p><b>{{aid.title}}</b> by {{aid.artist}}<br>
-            Hits: {{aid.hits}}<br>
-            Uploaded on {{ aid.date_posted.strftime('%Y-%m-%d') }}</p>
+            {% include 'aid_div.html' %}
         {% endfor %}
         <br>
     {% endif %}

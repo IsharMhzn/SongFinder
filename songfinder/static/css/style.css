@@ -27,6 +27,7 @@ body {
   color: var(--dune);
 
 }
+
 /*---------------------------------------NAVIGATION MENU---------------------------------------*/
 .sidebar{
 	position: fixed;
@@ -233,6 +234,7 @@ main{
 .width1400{
 	max-width: 1400px;
 	margin: auto;
+	margin-bottom: 20px;
 }
 
 .black{
@@ -314,10 +316,49 @@ button:hover{
 .container .col2:nth-child(2){
 	flex-basis: 60%;
 }
+.col2 a {
+	text-decoration: none;
+	color: #e9e8ec;
+}
+
+.col2 a:hover {
+	color: var(--orange1);
+}
+
 .col2 img{
 	max-width: 100%;
 	padding: 50px 0;
 }
+
+.aid-container{
+	width: 80%;
+	margin: auto;
+}
+
+.aid {
+	background-color: #e8e8e8;
+	color: #2b2b2a;
+	border: 0.5px #2b2b2b solid;
+	border-radius: 5px;
+	border-left: 3px #2b2b2a solid;
+	padding: 10px;
+	margin: 3px;
+}
+
+.aid a{
+	text-decoration: none;
+	color: #2b2b2b;
+
+}
+
+.aid a:hover {
+	color: var(--orange1);
+}
+
+.aid a:active{
+	color: #242221;
+}
+
 
 
 @media screen and (max-width: 1100px){

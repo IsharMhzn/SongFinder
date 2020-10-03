@@ -18,7 +18,7 @@
                         {% else %}
                         <h1>Welcome to SongFinder</h1>
                         <h3>Discover your love for music</h3>
-                        <button><a>Create An Account Now</a></button>
+                        <button><a href="{{ url_for('login') }}">Login</a></button>
                         {% endif %}
 					</div>
 					<div class="col2">
@@ -73,8 +73,6 @@
                 {{ form.submit }}
             </div>
         </form>
-    {% else %}
-        <a href="{{ url_for('login') }}">Login to start posting aids</a><br>
     {% endif %}
     {% if aids %}
         {% for aid in aids %}
